@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <meta name="theme-color" content="#6b7bff">
+  <title>休休 · 轻量休息引导</title>
+  <style>
+    :root {
+      --bg: #f3f6ff;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #6b7bff;
+      --primary-2: #4f46e5;
+      --accent: #10b981;
+      --border: rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "PingFang SC","Microsoft YaHei",sans-serif; }
+    body {
+      background: radial-gradient(circle at 20% 20%, rgba(107,123,255,0.10), transparent 35%),
+                  radial-gradient(circle at 80% 0%, rgba(16,185,129,0.12), transparent 32%),
+                  var(--bg);
+      min-height: 100vh;
+      padding: 18px 12px 28px;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .shell {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero {
+      padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(107,123,255,0.16), rgba(79,70,229,0.18));
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 18px rgba(79,70,229,0.12);
+    }
+    .hero h1 { font-size: clamp(1.4rem, 3.6vw, 2rem); margin-bottom: 6px; }
+    .hero p { color: var(--muted); line-height: 1.5; font-size: 0.95rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 18px rgba(31,41,55,0.06);
+    }
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .options { display: grid; gap: 8px; }
+    .btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: #f9fafb;
+      text-align: left;
+      font-size: 0.97rem;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.08s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(79,70,229,0.12); border-color: rgba(79,70,229,0.35); }
+    .btn:active { transform: translateY(0); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      border: none;
+      box-shadow: 0 10px 22px rgba(79,70,229,0.2);
+    }
+    .pill {
+      background: rgba(79,70,229,0.12);
+      color: var(--primary-2);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+    .result {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .cta {
+      display: grid;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .link-btn {
+      display: inline-flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      transition: transform 0.08s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .link-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(79,70,229,0.12); border-color: rgba(79,70,229,0.35); }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .divider { height: 1px; background: var(--border); margin: 8px 0; }
+    .footer { text-align: center; color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+    .subhead { font-weight: 600; font-size: 0.95rem; margin: 6px 0 4px; display: flex; align-items: center; gap: 6px; }
+    .audio-list { display: grid; gap: 6px; }
+    .audio-btn {
+      display: grid; grid-template-columns: 1fr auto; align-items: center;
+      gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: #f8fafc; color: var(--text); text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .audio-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(79,70,229,0.1); border-color: rgba(79,70,229,0.3); }
+    .game-grid { display: grid; gap: 8px; }
+    .game-btn {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 11px 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: #f9fafb; color: var(--text); text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+    .game-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(79,70,229,0.12); border-color: rgba(79,70,229,0.35); }
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.32);
+      display: none; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+    }
+    .modal.show { display: flex; }
+    .modal-card {
+      width: min(420px, 100%); background: #fff; border-radius: 14px; padding: 14px;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.18);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .chat-log { max-height: 260px; overflow-y: auto; display: grid; gap: 8px; padding: 6px; background: #f8fafc; border-radius: 10px; border: 1px solid var(--border); }
+    .bubble { padding: 8px 10px; border-radius: 10px; line-height: 1.5; max-width: 100%; }
+    .user { background: #e0e7ff; align-self: flex-end; }
+    .bot { background: #ecfdf3; }
+    .chat-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .input {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+    .pill-ghost { background: #f1f5f9; color: var(--muted); padding: 6px 10px; border-radius: 999px; font-size: 0.85rem; }
+    @media (max-width: 520px) {
+      body { padding: 14px 10px 22px; }
+      .card { padding: 12px; }
+      .btn { padding: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <h1>嘿，我是休休</h1>
+      <p>2-3 个问题，帮你快速选休息方式。可随时跳过，选“随意”也行。</p>
+    </section>
+
+    <section class="card" id="q1">
+      <div class="section-title">第一问 · 你现在主要是哪种累？</div>
+      <div class="options">
+        <button class="btn" data-fatigue="body">身体累（眼睛酸、肩膀僵）<span class="pill">推荐放松</span></button>
+        <button class="btn" data-fatigue="mind">心里累（焦虑、难专注）<span class="pill">推荐解压</span></button>
+        <button class="btn" data-fatigue="blur">说不清，就是乏<span class="pill">再问一步</span></button>
+        <button class="btn" data-fatigue="skip">跳过，直接给我一个快速休息方式</button>
+      </div>
+    </section>
+
+    <section class="card" id="q2" style="display:none;">
+      <div class="section-title">第二问 · 你能腾出多久？</div>
+      <div class="options">
+        <button class="btn" data-duration="short">5 分钟以内</button>
+        <button class="btn" data-duration="mid">5–15 分钟</button>
+        <button class="btn" data-duration="long">15 分钟以上</button>
+        <button class="btn" data-duration="free">不确定/随意</button>
+      </div>
+    </section>
+
+    <section class="card" id="q3" style="display:none;">
+      <div class="section-title">第三问（可选）· 休息时希望？</div>
+      <div class="options">
+        <button class="btn" data-guidance="guided">想要引导（带我呼吸/冥想）</button>
+        <button class="btn" data-guidance="self">想自己来（白噪音/小游戏）</button>
+        <button class="btn" data-guidance="either">都可以，你推荐</button>
+        <button class="btn" data-guidance="skip">跳过这步</button>
+      </div>
+    </section>
+
+    <section class="card" id="result" style="display:none;">
+      <div class="section-title">你的休息方案</div>
+      <div class="result" id="result-text"></div>
+      <div class="cta" id="cta-links"></div>
+      <div class="subhead" id="noise-title" style="display:none;">白噪音 / 环境声</div>
+      <div class="audio-list" id="noise-list" style="display:none;"></div>
+      <div class="subhead" id="game-title" style="display:none;">小游戏 · 快速切换注意</div>
+      <div class="game-grid" id="game-list" style="display:none;"></div>
+      <div class="cta">
+        <button class="btn" id="chat-btn">和休休聊两句（点击右下角休休）</button>
+      </div>
+      <div class="divider"></div>
+      <button class="btn primary" id="restart">重来一遍</button>
+    </section>
+
+    <div class="footer">可随时中断或跳过；休息后再继续忙。</div>
+  </div>
+
+  <div class="modal" id="chat-modal">
+    <div class="modal-card">
+      <div class="section-title">休休 · 简短对话</div>
+      <div class="chat-log" id="chat-log"></div>
+      <div class="chat-actions">
+        <input class="input" id="chat-input" placeholder="想说什么都行，或输入“结束”关闭" maxlength="120" />
+        <button class="btn primary" id="chat-send" style="width:auto;">发送</button>
+      </div>
+      <div class="muted" style="font-size:0.85rem;">提示：保持简短，随时可关闭。</div>
+      <button class="btn" id="chat-close">关闭对话</button>
+    </div>
+  </div>
+
+  <script>
+    const state = { fatigue: null, duration: null, guidance: null };
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+    const result = document.getElementById('result');
+    const resultText = document.getElementById('result-text');
+    const ctaLinks = document.getElementById('cta-links');
+    const noiseTitle = document.getElementById('noise-title');
+    const noiseList = document.getElementById('noise-list');
+    const gameTitle = document.getElementById('game-title');
+    const gameList = document.getElementById('game-list');
+    const restartBtn = document.getElementById('restart');
+    const chatBtn = document.getElementById('chat-btn');
+    const chatModal = document.getElementById('chat-modal');
+    const chatLog = document.getElementById('chat-log');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatClose = document.getElementById('chat-close');
+
+    const noiseOptions = [
+      { label: '雨声 · 柔和', href: 'https://img.tukuppt.com/newpreview_music/08/98/53/5c889d90a80db39107.mp3' },
+      { label: '森林 · 细雨', href: 'https://ambicular.com/sounds/hipster/birds160.mp3' },
+      { label: '海浪 · 慢拍', href: 'https://ambicular.com/sounds/hipster/ocean.mp3' },
+      { label: '咖啡店底噪', href: 'https://ambicular.com/sounds/cafe/cafe-brazil-walla160.mp3' },
+      { label: '篝火 · 温暖', href: 'https://ambicular.com/sounds/hipster/fireplace.mp3' }
+    ];
+    const gameOptions = [
+      { label: '记忆翻牌', href: 'https://jiyifanpai.netlify.app/' },
+      { label: '海洋消消乐', href: 'https://bridy111.github.io/Ocean-connection/' },
+      { label: '慢拼时光', href: 'https://zzd-atr.github.io/pintuyyy/' },
+      { label: '涂色花园', href: 'https://bridy111.github.io/jihetuse/' }
+    ];
+
+    const quickPack = () => ({
+      title: '快速充电包 · 约 5 分钟，可随时停',
+      steps: [
+        '30 秒：闭眼+三次深呼吸（4 秒吸气，6 秒呼气）',
+        '2 分钟：轻转头、耸肩、拉伸手腕各 5 次',
+        '2 分钟：闭眼休息或看 6 米外绿色/蓝色物体'
+      ],
+      extras: [
+        { label: '白噪音（海浪）', href: 'https://ambicular.com/sounds/hipster/ocean.mp3' },
+        { label: '轻游戏 · 海洋消消乐', href: 'https://bridy111.github.io/jieyaxiaoxiaole/' }
+      ]
+    });
+
+    const plans = {
+      body: {
+        short: {
+          title: '身体微休息 · 5 分钟',
+          steps: [
+            '1 分钟：4-6 呼吸（4 秒吸，6 秒呼）',
+            '2 分钟：颈侧拉伸+耸肩各 5 次',
+            '2 分钟：闭眼或远眺 6 米外，放松眼肌'
+          ],
+          extras: [{ label: '身体舒缓 · 记忆翻牌', href: 'https://jiyifanpai.netlify.app/' }]
+        },
+        mid: {
+          title: '身体舒展 · 10 分钟',
+          steps: [
+            '2 分钟：方块呼吸（4 吸-4 停-4 呼-4 停）',
+            '4 分钟：颈肩拉伸、胸椎扩展各 2 轮',
+            '4 分钟：闭眼+听白噪音放松'
+          ],
+          extras: [
+            { label: '雨声白噪音', href: 'https://img.tukuppt.com/newpreview_music/08/98/53/5c889d90a80db39107.mp3' },
+            { label: '轻游戏 · 海洋消消乐', href: 'https://bridy111.github.io/Ocean-connection/' }
+          ]
+        },
+        long: {
+          title: '身体修复 · 15 分钟+',
+          steps: [
+            '3 分钟：腹式呼吸（手放腹部感受起伏）',
+            '6 分钟：全身扫描式拉伸（颈-肩-腰-手腕-踝）',
+            '6 分钟：闭眼静息或慢走'
+          ],
+          extras: [{ label: '慢拼时光（治愈拼图）', href: 'https://zzd-atr.github.io/pintuyyy/' }]
+        },
+        free: null
+      },
+      mind: {
+        short: {
+          title: '心绪速降 · 5 分钟',
+          steps: [
+            '2 分钟：计数呼吸（吸 4、呼 6，数 10 轮）',
+            '1 分钟：写下一件此刻的烦恼并深呼吸 3 次',
+            '2 分钟：闭眼听白噪音或看远'
+          ],
+          extras: [
+            { label: '白噪音 · 森林', href: 'https://ambicular.com/sounds/hipster/birds160.mp3' },
+            { label: '轻游戏 · 记忆翻牌', href: 'https://jiyifanpai.netlify.app/' }
+          ]
+        },
+        mid: {
+          title: '轻解压 · 10 分钟',
+          steps: [
+            '3 分钟：5-5-5 呼吸（吸 5、停 5、呼 5）',
+            '4 分钟：随便写/画，倾倒脑内杂念',
+            '3 分钟：轻音乐或轻游戏切换注意'
+          ],
+          extras: [
+            { label: '涂色花园（解压涂鸦）', href: 'https://bridy111.github.io/jihetuse/' },
+            { label: '海洋消消乐', href: 'https://bridy111.github.io/Ocean-connection/' }
+          ]
+        },
+        long: {
+          title: '沉浸放松 · 15 分钟+',
+          steps: [
+            '5 分钟：引导式正念呼吸',
+            '5 分钟：轻音乐/白噪音 + 闭眼',
+            '5 分钟：解压涂鸦或慢拼时光'
+          ],
+          extras: [
+            { label: '慢拼时光', href: 'https://zzd-atr.github.io/pintuyyy/' },
+            { label: '涂色花园', href: 'https://bridy111.github.io/jihetuse/' }
+          ]
+        },
+        free: null
+      },
+      blur: null,
+      skip: null
+    };
+
+    function show(el) { el.style.display = 'block'; }
+    function hide(el) { el.style.display = 'none'; }
+
+    function reset() {
+      state.fatigue = state.duration = state.guidance = null;
+      hide(q2); hide(q3); hide(result);
+      noiseTitle.style.display = 'none';
+      noiseList.style.display = 'none';
+      noiseList.innerHTML = '';
+      gameTitle.style.display = 'none';
+      gameList.style.display = 'none';
+      gameList.innerHTML = '';
+      show(q1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function applyGuidanceText(plan, guidance) {
+      if (!plan) return '';
+      if (guidance === 'guided') return '我会轻声引导，你跟着节奏呼吸 / 行动即可。';
+      if (guidance === 'self') return '你可以按步骤自助进行，如需声音可点下方白噪音/音乐。';
+      return '按步骤进行即可，随时可停或切换。';
+    }
+
+    function buildResult() {
+      let plan;
+      if (state.fatigue === 'skip') {
+        plan = quickPack();
+      } else if (state.fatigue === 'blur') {
+        const durKey = state.duration || 'short';
+        plan = plans.mind[durKey] || quickPack();
+      } else {
+        const category = plans[state.fatigue] || {};
+        const durKey = state.duration || 'short';
+        plan = category[durKey] || quickPack();
+      }
+
+      const guidanceText = applyGuidanceText(plan, state.guidance);
+      resultText.innerHTML = `
+        <div class="chip">疲劳类型：${state.fatigue ? mapFatigue(state.fatigue) : '未选择'}</div>
+        <div class="chip">可用时长：${state.duration ? mapDuration(state.duration) : '默认 5 分钟'}</div>
+        ${state.guidance && state.guidance !== 'skip' ? `<div class="chip">偏好：${mapGuidance(state.guidance)}</div>` : ''}
+        <div><strong>${plan.title}</strong></div>
+        <ul style="padding-left:18px; color:${'var(--text)'}; line-height:1.6; margin:6px 0;">
+          ${plan.steps.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+        <div class="muted">${guidanceText}</div>
+      `;
+
+      ctaLinks.innerHTML = '';
+      if (plan.extras && plan.extras.length) {
+        plan.extras.forEach(e => {
+          const a = document.createElement('a');
+          a.className = 'link-btn';
+          a.href = e.href;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.innerHTML = `<span>${e.label}</span><span style="color:var(--muted);font-size:0.9rem;">打开</span>`;
+          ctaLinks.appendChild(a);
+        });
+      }
+
+      renderNoises();
+      renderGames();
+
+      hide(q1); hide(q2); hide(q3); show(result);
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function mapFatigue(f) {
+      return { body: '身体累', mind: '心里累', blur: '说不清', skip: '跳过' }[f] || '未选';
+    }
+    function mapDuration(d) {
+      return { short: '≤5 分钟', mid: '5–15 分钟', long: '15 分钟以上', free: '随意' }[d] || '默认';
+    }
+    function mapGuidance(g) {
+      return { guided: '需要引导', self: '自己来', either: '都可以' }[g] || '';
+    }
+
+    function renderNoises() {
+      noiseTitle.style.display = 'block';
+      noiseList.style.display = 'grid';
+      noiseList.innerHTML = '';
+      noiseOptions.forEach((n, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'audio-btn';
+        const label = document.createElement('div');
+        label.textContent = n.label;
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.preload = 'none';
+        audio.src = n.href;
+        audio.style.maxWidth = '180px';
+        audio.setAttribute('controlsList', 'nodownload noplaybackrate');
+        wrap.appendChild(label);
+        wrap.appendChild(audio);
+        noiseList.appendChild(wrap);
+      });
+    }
+
+    function renderGames() {
+      gameTitle.style.display = 'block';
+      gameList.style.display = 'grid';
+      gameList.innerHTML = '';
+      gameOptions.forEach(g => {
+        const a = document.createElement('a');
+        a.className = 'game-btn';
+        a.href = g.href;
+        a.textContent = g.label;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        const tag = document.createElement('span');
+        tag.className = 'pill-ghost';
+        tag.textContent = '打开';
+        a.appendChild(tag);
+        gameList.appendChild(a);
+      });
+    }
+
+    function appendChat(role, text) {
+      const div = document.createElement('div');
+      div.className = `bubble ${role === 'user' ? 'user' : 'bot'}`;
+      div.textContent = text;
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    function botReply(userText) {
+      const fatigue = mapFatigue(state.fatigue) || '暂未选择';
+      const duration = mapDuration(state.duration) || '约 5 分钟';
+      const guidance = state.guidance && state.guidance !== 'skip' ? mapGuidance(state.guidance) : '随意';
+      const suggestions = [
+        `听到了。基于你刚选的【${fatigue} / ${duration}】，建议先做 3 轮 4-6 呼吸，再试试下方的白噪音。`,
+        `收到，保持轻松。你可以按刚才的方案来，也可以直接点白噪音或小游戏切换注意。`,
+        `好的，我在。需要更短的方案吗？可以用“快速充电包”：呼吸 30 秒 + 拉伸 2 分钟 + 闭眼 2 分钟。`,
+        `如果想被引导，可以选“需要引导”；想自己来，就用下方工具箱，随时停。`
+      ];
+      const idx = Math.floor(Math.random() * suggestions.length);
+      appendChat('bot', suggestions[idx]);
+    }
+
+    function openChat() {
+      chatModal.classList.add('show');
+      if (!chatLog.hasChildNodes()) {
+        appendChat('bot', '累了吗？我是休休，简单聊两句。随时说“结束”就停。');
+      }
+      chatInput.focus();
+    }
+    function closeChat() {
+      chatModal.classList.remove('show');
+      chatInput.value = '';
+    }
+
+    chatBtn.addEventListener('click', openChat);
+    chatClose.addEventListener('click', closeChat);
+    chatSend.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      appendChat('user', text);
+      chatInput.value = '';
+      if (text.includes('结束') || text.includes('再见')) {
+        appendChat('bot', '好的，随时再找我。记得按自己的节奏休息。');
+        setTimeout(closeChat, 400);
+        return;
+      }
+      botReply(text);
+    });
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        chatSend.click();
+      }
+    });
+
+    // Q1
+    q1.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.fatigue = btn.dataset.fatigue;
+        if (state.fatigue === 'skip') {
+          state.duration = null; state.guidance = null;
+          buildResult();
+          return;
+        }
+        show(q2);
+        q2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    // Q2
+    q2.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.duration = btn.dataset.duration;
+        show(q3);
+        q3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    // Q3
+    q3.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.guidance = btn.dataset.guidance;
+        buildResult();
+      });
+    });
+
+    restartBtn.addEventListener('click', reset);
+  </script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7579540460054806570',
+      },
+      componentProps: {
+        title: '休休',
+      },
+      auth: {
+        type: 'token',
+        token: 'pat_dg6uxKRAWnlm73xVCQl25POzfJexJNUDoMsewgyKWYYhDOWaw31RBszUnU7H0Zbf',
+        onRefreshToken: function () {
+          return 'pat_dg6uxKRAWnlm73xVCQl25POzfJexJNUDoMsewgyKWYYhDOWaw31RBszUnU7H0Zbf'
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
